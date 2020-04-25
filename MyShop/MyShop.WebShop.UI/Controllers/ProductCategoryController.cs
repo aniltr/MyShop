@@ -10,10 +10,10 @@ namespace MyShop.WebShop.UI.Controllers
 {
     public class ProductCategoryController : Controller
     {
-        ProductCategoryRepository dataContext;
+        InMemoryRepository<ProductCategory> dataContext;
         public ProductCategoryController()
         {
-            this.dataContext = new ProductCategoryRepository();
+            this.dataContext = new InMemoryRepository<ProductCategory>();
         }
         // GET: ProductCategory
         public ActionResult Index()
