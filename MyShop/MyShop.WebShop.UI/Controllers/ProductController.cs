@@ -1,4 +1,5 @@
-﻿using MyShop.Core.Models;
+﻿using MyShop.Core.Contracts;
+using MyShop.Core.Models;
 using MyShop.Core.ViewModel;
 using MyShop.DataAccess.InMemory;
 using System;
@@ -11,12 +12,12 @@ namespace MyShop.WebShop.UI.Controllers
 {
     public class ProductController : Controller
     {
-        InMemoryRepository<Product> dataContext;
-        InMemoryRepository<ProductCategory> categoryContext;
-        public ProductController()
+        IRepository<Product> dataContext;
+        IRepository<ProductCategory> categoryContext;
+        public ProductController(IRepository<Product> dataContext, IRepository<ProductCategory> categoryContext)
         {
-            this.dataContext = new InMemoryRepository<Product>();
-            this.categoryContext = new InMemoryRepository<ProductCategory>();
+            this.dataContext = dataContext;
+            this.categoryContext = categoryContext;
         }
         // GET: Product
         public ActionResult Index()
