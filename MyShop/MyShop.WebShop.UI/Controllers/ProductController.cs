@@ -4,6 +4,7 @@ using MyShop.Core.ViewModel;
 using MyShop.DataAccess.InMemory;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,7 @@ namespace MyShop.WebShop.UI.Controllers
 {
     public class ProductController : Controller
     {
+        string _imgUncPath = "//Content//ProductImages//";
         IRepository<Product> dataContext;
         IRepository<ProductCategory> categoryContext;
         public ProductController(IRepository<Product> dataContext, IRepository<ProductCategory> categoryContext)
@@ -35,7 +37,7 @@ namespace MyShop.WebShop.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase file)
         {
             if(!ModelState.IsValid)
             {
@@ -43,6 +45,12 @@ namespace MyShop.WebShop.UI.Controllers
             }
             else
             {
+                if(file != null)
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath(_imgUncPath) + product.Image);
+                }
+
                 dataContext.Insert(product);
                 dataContext.Commit();
                 return RedirectToAction("Index");
@@ -66,7 +74,7 @@ namespace MyShop.WebShop.UI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, string id)
+        public ActionResult Edit(Product product, string id, HttpPostedFileBase file)
         {
             Product productToEdit = dataContext.Find(id);
             if (productToEdit == null)
@@ -75,11 +83,17 @@ namespace MyShop.WebShop.UI.Controllers
             }
             else
             {
+                if(file!= null)
+                {
+                    productToEdit.Image = productToEdit.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath(_imgUncPath) + productToEdit.Image);
+                }
+
                 productToEdit.Name = product.Name;
                 productToEdit.Description = product.Description;
                 productToEdit.Category = product.Category;
                 productToEdit.Price = product.Price;
-                productToEdit.Image = product.Image;
+                
 
                 dataContext.Update(productToEdit);
                 dataContext.Commit();
