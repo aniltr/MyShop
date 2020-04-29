@@ -1,5 +1,6 @@
 ﻿using MyShop.Core.Contracts;
 using MyShop.Core.Models;
+using MyShop.Core.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,25 @@ namespace MyShop.WebShop.UI.Controllers
             this.categoryContext = categoryContext;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string category = null)
         {
-            List<Product> products = this.dataContext.Collection().ToList();
-            return View(products);
+            List<Product> products;
+            List<ProductCategory> productCategories;
+            ProductListViewModel viewModel = new ProductListViewModel();
+
+            if (category == null)
+            {
+                products = this.dataContext.Collection().ToList();
+            }
+            else
+            {
+                products = this.dataContext.Collection().Where(p => p.Category == category).ToList();
+            }
+            productCategories = categoryContext.Collection().ToList();
+            viewModel.Products = products;
+            viewModel.ProudctCategories = productCategories;
+
+            return View(viewModel);
         }
 
         public ActionResult Details(string id)
