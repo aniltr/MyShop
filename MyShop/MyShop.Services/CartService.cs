@@ -14,13 +14,15 @@ namespace MyShop.Services
     {
         IRepository<Product> productContext;
         IRepository<Cart> cartContext;
+        IRepository<CartItem> cartItemContext;
 
         const string CartSessionName = "eCommerceCartId";
 
-        public CartService(IRepository<Product> productContext, IRepository<Cart> cartContext)
+        public CartService(IRepository<Product> productContext, IRepository<Cart> cartContext, IRepository<CartItem> cartItemContext)
         {
             this.productContext = productContext;
             this.cartContext = cartContext;
+            this.cartItemContext = cartItemContext;
         }
 
         private Cart GetCart(HttpContextBase httpContext, bool createIfNull)
@@ -74,7 +76,7 @@ namespace MyShop.Services
             {
                 item = new CartItem
                 {
-                    Id = shoppingCart.Id,
+                    CartId = shoppingCart.Id,
                     ProductId = productId,
                     Quantity = 1
                 };

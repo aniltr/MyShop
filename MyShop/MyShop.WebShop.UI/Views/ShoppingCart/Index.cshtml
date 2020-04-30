@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MyShop.Core.ViewModel.ShoppingCartViewModel>
+
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<h2>Shopping Cart</h2>
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            Amount
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        <img class="img-thumbnail" style="height:50px;width:50px;" src="~/Content/ProductImages/@item.Image" />
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.ProductName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Quantity)
+    </td>
+    <td>
+        @String.Format("{0:c}", item.Price)
+    </td>
+    <td>
+        @String.Format("{0:c}", item.Quantity * item.Price)
+    </td>
+    <td>
+        <a href="@Url.Action("RemoveFromCart", "ShoppingCart", new { cartId = item.Id })" class="btn btn-danger">Delete</a>
+    </td>
+</tr>
+}
+<tr>
+    <td colspan="4" style="text-align: right;"><strong>Shopping Cart Total</strong></td>
+    <td colspan="2">@String.Format("{0:c}", (from ci in Model select ci.Quantity*ci.Price).Sum())</td>
+</tr>
+</table>
