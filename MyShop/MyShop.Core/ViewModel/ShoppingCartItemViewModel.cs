@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.Core.ViewModel
 {
-    public class ShoppingCartViewModel
+    public class ShoppingCartItemViewModel
     {
         public string Id { get; set; }
         public int Quantity { get; set; }

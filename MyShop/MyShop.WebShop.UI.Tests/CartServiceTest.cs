@@ -97,7 +97,7 @@ namespace MyShop.WebShop.UI.Tests
             cart.AddToCart(context.Object, "2");
 
             //Act
-            List<ShoppingCartViewModel> items = cart.GetCartItems(context.Object);
+            List<ShoppingCartItemViewModel> items = cart.GetCartItems(context.Object);
 
             //Assert
             Assert.IsTrue(items.Count == 1);

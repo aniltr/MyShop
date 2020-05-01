@@ -96,7 +96,7 @@ namespace MyShop.Services
             }
         }
 
-        public List<ShoppingCartViewModel> GetCartItems(HttpContextBase httpContext)
+        public List<ShoppingCartItemViewModel> GetCartItems(HttpContextBase httpContext)
         {
             Cart shoppingCart = GetCart(httpContext, false);
 
@@ -104,7 +104,7 @@ namespace MyShop.Services
             {
                 var results = (from c in shoppingCart.CartItems
                               join p in productContext.Collection() on c.ProductId equals p.Id
-                              select new ShoppingCartViewModel
+                              select new ShoppingCartItemViewModel
                               {
                                   Id = c.Id,
                                   Quantity = c.Quantity,
@@ -116,7 +116,7 @@ namespace MyShop.Services
             }
             else
             {
-                return new List<ShoppingCartViewModel>();
+                return new List<ShoppingCartItemViewModel>();
             }
         }
 
@@ -136,6 +136,13 @@ namespace MyShop.Services
                 viewModel.CartTotal = cartTotalAmount ?? decimal.Zero;
             }
             return viewModel;
+        }
+
+        public void ClearCart(HttpContextBase httpContext)
+        {
+            Cart shoppingCart = GetCart(httpContext, false);
+            shoppingCart.CartItems.Clear();
+            cartContext.Commit();
         }
     }
 }

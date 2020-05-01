@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyShop.Core.ViewModel.ShoppingCartViewModel>
+﻿@model IEnumerable<MyShop.Core.ViewModel.ShoppingCartItemViewModel>
 
 @{
     ViewBag.Title = "Shopping Cart";
@@ -48,6 +48,7 @@
 }
 <tr>
     <td colspan="4" style="text-align: right;"><strong>Shopping Cart Total</strong></td>
-    <td colspan="2">@String.Format("{0:c}", (from ci in Model select ci.Quantity*ci.Price).Sum())</td>
+    <td>@String.Format("{0:c}", (from ci in Model select ci.Quantity*ci.Price).Sum())</td>
+    <td><a href="@Url.Action("CheckOut", "ShoppingCart")">CheckOut</a></td>
 </tr>
 </table>
