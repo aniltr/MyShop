@@ -13,10 +13,12 @@ namespace MyShop.WebShop.UI.Controllers
     {
         ICartService cartService;
         IOrderService orderService;
-        public ShoppingCartController(ICartService cartService, IOrderService orderService)
+        IRepository<Customer> customerContext;
+        public ShoppingCartController(ICartService cartService, IOrderService orderService, IRepository<Customer>  customerContext)
         {
             this.cartService = cartService;
             this.orderService = orderService;
+            this.customerContext = customerContext;
         }
         // GET: ShoppingCart
         public ActionResult Index()
@@ -43,11 +45,30 @@ namespace MyShop.WebShop.UI.Controllers
             return PartialView(viewModel);
         }
 
+        [Authorize]
         public ActionResult CheckOut()
         {
-            return View();
+            Customer customer = customerContext.Collection().FirstOrDefault(c => c.Email == User.Identity.Name);
+            if (customer != null)
+            {
+                Order order = new Order()
+                {
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName,
+                    Street = customer.Street,
+                    City = customer.City,
+                    State = customer.State,
+                    ZipCode = customer.ZipCode
+                };
+                return View(order);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
         }
 
+        [Authorize]
         [HttpPost]
         public ActionResult CheckOut(Order order)
         {
